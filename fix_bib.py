@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-from IPython.display import HTML
 import requests
 from io import StringIO
 
@@ -72,8 +71,8 @@ def show_table_with_icons(data_list):
         # Konversi DataFrame menjadi HTML
         data_html = data_transposed.to_html(escape=False)
 
-        # Tampilkan tabel dengan ikon menggunakan IPython.display.HTML
-        st.write(HTML(data_html))
+        # Tampilkan tabel dengan ikon 
+        st.markdown(data_html, unsafe_allow_html=True)
 
 
 def fetch_csv_data(url):
