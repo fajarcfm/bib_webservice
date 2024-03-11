@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import requests
 from io import StringIO
+from io import BytesIO
+from ftplib import FTP
 
 st.set_page_config(layout="wide")
 
@@ -112,48 +114,64 @@ def show_table_with_icons(data, location_name):
 
  
 
-def fetch_csv_data(url):
-    response = requests.get(url)
-    if response.status_code == 200:
-        return pd.read_csv(StringIO(response.text))
-    else:
-        st.error(f"Failed to fetch data from {url}")
+
+def fetch_csv_data_from_ftp(ftp_host, ftp_path, ftp_username, ftp_password):
+    ftp = None  # Inisialisasi ftp di luar blok try
+    try:
+        # Koneksi ke server FTP
+        ftp = FTP(ftp_host)
+        ftp.login(ftp_username, ftp_password)
+
+        # Baca file CSV dari FTP
+        buffer = BytesIO()
+        ftp.retrbinary('RETR ' + ftp_path, buffer.write)
+        buffer.seek(0)
+
+        return pd.read_csv(buffer)
+    except Exception as e:
+        st.error(f"Failed to fetch data from FTP: {str(e)}")
         return pd.DataFrame()
+    finally:
+        if ftp:
+            ftp.quit()
+
 
 def main():
+    # ...
     st.title("INFORMASI PRAKIRAAN CUACA KHUSUS PT. BORNEO INDOBARA")
 
     # Pilih tab menggunakan selectbox
     selected_location = st.radio("Pilih Lokasi Cuaca", ["AWSKGU", "AWSKGB", "PORTBUNATI", "PASOPATI"])
 
     # Pilih model menggunakan radio button
-    selected_model = st.radio("Pilih Model Cuaca", ["arome", "ecmwf"])
-
-    # Mapping dari nama lokasi ke URL CSV
-    location_urls = {
-        "AWSKGU": {
-            "arome": 'https://web.meteo.bmkg.go.id//media/data/bmkg/BIB/fj/AWSKGU_hourly_arome.csv',
-            "ecmwf": 'https://web.meteo.bmkg.go.id//media/data/bmkg/BIB/fj/AWSKGU_hourly_ecmwf.csv'
-        },
-        "AWSKGB": {
-            "arome": 'https://web.meteo.bmkg.go.id//media/data/bmkg/BIB/fj/AWSKGB_hourly_arome.csv',
-            "ecmwf": 'https://web.meteo.bmkg.go.id//media/data/bmkg/BIB/fj/AWSKGB_hourly_ecmwf.csv'
-        },
-        "PORTBUNATI": {
-            "arome": 'https://web.meteo.bmkg.go.id//media/data/bmkg/BIB/fj/PORTBUNATI_hourly_arome.csv',
-            "ecmwf": 'https://web.meteo.bmkg.go.id//media/data/bmkg/BIB/fj/PORTBUNATI_hourly_ecmwf.csv'
-        },
-        "PASOPATI": {
-            "arome": 'https://web.meteo.bmkg.go.id//media/data/bmkg/BIB/fj/PASOPATI_hourly_arome.csv',
-            "ecmwf": 'https://web.meteo.bmkg.go.id//media/data/bmkg/BIB/fj/PASOPATI_hourly_ecmwf.csv'
-        }
+    selected_model = st.radio("Pilih Model Cuaca", ["Ina-Arome", "ECMWF","Ina-Cawo"])
+    
+    # Mapping dari nama lokasi ke informasi FTP, termasuk username dan password
+    location_ftp_info = {
+        "AWSKGU": {"host": "publik.bmkg.go.id", "username": "model", "password": "modelbmkg2303"},
+        "AWSKGB": {"host": "publik.bmkg.go.id", "username": "model", "password": "modelbmkg2303"},
+        "PASOPATI": {"host": "publik.bmkg.go.id", "username": "model", "password": "modelbmkg2303"},
+        "PORTBUNATI": {"host": "publik.bmkg.go.id", "username": "model", "password": "modelbmkg2303"}
     }
 
-    # Ambil data dari URL yang sesuai dengan lokasi yang dipilih dan modelnya
-    selected_data = fetch_csv_data(location_urls[selected_location][selected_model])
+    # Ambil data dari FTP yang sesuai dengan lokasi yang dipilih dan modelnya
+    ftp_info = location_ftp_info[selected_location]
+    
+    # Tentukan path untuk model sesuai dengan pilihan pengguna
+    if selected_model == "Ina-Arome":
+        ftp_info["path"] = f"/BIB/{selected_location}_hourly_arome.csv"
+    elif selected_model == "ECMWF":
+        ftp_info["path"] = f"/BIB/{selected_location}_hourly_ecmwf.csv"
+    elif selected_model == "Ina-Cawo":
+        ftp_info["path"] = f"/BIB/{selected_location}_hourly_inacawo.csv"
+    else:
+        st.error("Model cuaca tidak valid.")
+
+    selected_data = fetch_csv_data_from_ftp(ftp_info["host"], ftp_info["path"], ftp_info["username"], ftp_info["password"])
 
     # Tampilkan tabel untuk data yang dipilih
     show_table_with_icons(selected_data, selected_location)
 
 if __name__ == "__main__":
     main()
+
