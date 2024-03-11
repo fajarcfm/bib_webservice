@@ -83,7 +83,7 @@ def show_table_with_icons(data, location_name):
                 border-collapse: collapse;
                 width: 80%;
                 margin-right: auto;  /* Geser tabel ke kiri */
-                margin-left: -40px;
+                margin-left: -30px;
             }
             th, td {
                 border: 1px solid black;
