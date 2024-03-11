@@ -54,7 +54,7 @@ def show_table_with_icons(data, location_name):
 
     # Menambah kolom tanggal dan waktu
     data['Tanggal'] = data['valid_time'].dt.date
-    data['Waktu'] = data['valid_time'].dt.time
+    data['Waktu'] = data['valid_time'].dt.strftime('%H:%M') 
 
     # Ganti nilai dalam kolom "Kondisi_cuaca" dengan tag gambar HTML
     data["Kondisi_cuaca"] = data["Kondisi_cuaca"].apply(get_weather_icon)
