@@ -47,7 +47,7 @@ from datetime import datetime
 
 # Fungsi untuk menampilkan tabel data dengan ikon
 def show_table_with_icons(data, location_name):
-    st.subheader(f"Cuaca di {location_name}")
+    st.subheader(f"Detail Cuaca di Lokasi {location_name}")
 
     # Mengubah kolom "valid_time" menjadi format datetime
     data['valid_time'] = pd.to_datetime(data['valid_time'])
@@ -122,7 +122,7 @@ def main():
     st.title("INFORMASI PRAKIRAAN CUACA KHUSUS PT. BORNEO INDOBARA")
 
     # Pilih tab menggunakan selectbox
-    selected_location = st.radio("Pilih Lokasi Cuaca", ["Cuaca AWSKGU", "Cuaca AWSKGB", "Cuaca PORTBUNATI", "Cuaca PASOPATI"])
+    selected_location = st.radio("Pilih Lokasi Cuaca", ["AWSKGU", "AWSKGB", "PORTBUNATI", "PASOPATI"])
 
     # Pilih model menggunakan radio button
     selected_model = st.radio("Pilih Model Cuaca", ["arome", "ecmwf"])
