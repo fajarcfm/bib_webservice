@@ -129,19 +129,19 @@ def main():
 
     # Mapping dari nama lokasi ke URL CSV
     location_urls = {
-        "Cuaca AWSKGU": {
+        "AWSKGU": {
             "arome": 'https://web.meteo.bmkg.go.id//media/data/bmkg/BIB/fj/AWSKGU_hourly_arome.csv',
             "ecmwf": 'https://web.meteo.bmkg.go.id//media/data/bmkg/BIB/fj/AWSKGU_hourly_ecmwf.csv'
         },
-        "Cuaca AWSKGB": {
+        "AWSKGB": {
             "arome": 'https://web.meteo.bmkg.go.id//media/data/bmkg/BIB/fj/AWSKGB_hourly_arome.csv',
             "ecmwf": 'https://web.meteo.bmkg.go.id//media/data/bmkg/BIB/fj/AWSKGB_hourly_ecmwf.csv'
         },
-        "Cuaca PORTBUNATI": {
+        "PORTBUNATI": {
             "arome": 'https://web.meteo.bmkg.go.id//media/data/bmkg/BIB/fj/PORTBUNATI_hourly_arome.csv',
             "ecmwf": 'https://web.meteo.bmkg.go.id//media/data/bmkg/BIB/fj/PORTBUNATI_hourly_ecmwf.csv'
         },
-        "Cuaca PASOPATI": {
+        "PASOPATI": {
             "arome": 'https://web.meteo.bmkg.go.id//media/data/bmkg/BIB/fj/PASOPATI_hourly_arome.csv',
             "ecmwf": 'https://web.meteo.bmkg.go.id//media/data/bmkg/BIB/fj/PASOPATI_hourly_ecmwf.csv'
         }
