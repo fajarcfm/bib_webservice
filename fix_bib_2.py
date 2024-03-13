@@ -144,7 +144,7 @@ def main():
     selected_location = st.radio("Pilih Lokasi Cuaca", ["AWSKGU", "AWSKGB", "PORTBUNATI", "PASOPATI"])
 
     # Pilih model menggunakan radio button
-    selected_model = st.radio("Pilih Model Cuaca", ["Ina-Arome", "IFS","Ina-Cawo"])
+    selected_model = st.radio("Pilih Model Cuaca", ["Ina-Arome", "BMKG-IFS","Ina-Cawo"])
     
     # Mapping dari nama lokasi ke informasi FTP, termasuk username dan password
     location_ftp_info = {
@@ -160,7 +160,7 @@ def main():
     # Tentukan path untuk model sesuai dengan pilihan pengguna
     if selected_model == "Ina-Arome":
         ftp_info["path"] = f"/BIB/{selected_location}_hourly_arome.csv"
-    elif selected_model == "IFS":
+    elif selected_model == "BMKG-IFS":
         ftp_info["path"] = f"/BIB/{selected_location}_hourly_ecmwf.csv"
     elif selected_model == "Ina-Cawo":
         ftp_info["path"] = f"/BIB/{selected_location}_hourly_inacawo.csv"
